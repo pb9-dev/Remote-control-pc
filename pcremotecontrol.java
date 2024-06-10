@@ -35,7 +35,7 @@ public class pcremotecontrol {
 			client = server.accept(); //Listens for a connection to be made to this socket and accepts it
 			in = new BufferedReader(new InputStreamReader(client.getInputStream())); //the input stream where data will come from client
 		}catch (IOException e) {
-			System.out.println("Error in opening Socket");
+			System.out.println("Error in opening socket");
 			System.exit(-1);
 		}catch (AWTException e) {
 			System.out.println("Error in creating robot instance");
