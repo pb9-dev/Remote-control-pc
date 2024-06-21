@@ -31,61 +31,62 @@ public class pcremotecontrol {
  
 	    try{
 	    		robot = new Robot();
-			server = new ServerSocket(SERVER_PORT); //Create a server socket on port 8998
-			client = server.accept(); //Listens for a connection to be made to this socket and accepts it
-			in = new BufferedReader(new InputStreamReader(client.getInputStream())); //the input stream where data will come from client
+			server = new ServerSocket(SERVER_PORT); //server socket on port 8998
+			client = server.accept(); 
+			in = new BufferedReader(new InputStreamReader(client.getInputStream())); 
 		}catch (IOException e) {
 			System.out.println("Error in opening socket");
 			System.exit(-1);
 		}catch (AWTException e) {
-			System.out.println("Error in creating robot instance");
+			System.out.println("Error during creation of robot instance");
 			System.exit(-1);
 		}
 			
-		//read input from client while it is connected
+		//read input from client until it is connected
 	    while(isConnected){
 	        try{
-			line = in.readLine(); //read input from client
-			System.out.println(line); //print whatever we get from client
+			line = in.readLine(); 
+			System.out.println(line); 
 			
-			//if user clicks on next
+			//if someone clicks on next
 			if(line.equalsIgnoreCase("next")){
 				//Simulate press and release of key 'n'
 				robot.keyPress(KeyEvent.VK_N);
 				robot.keyRelease(KeyEvent.VK_N);
 			}
-			//if user clicks on previous
+			//if someone clicks on previous
 			else if(line.equalsIgnoreCase("previous")){
 				//Simulate press and release of key 'p'
+				System.out.println("In p");
 				robot.keyPress(KeyEvent.VK_P);
 				robot.keyRelease(KeyEvent.VK_P);		        	
 			}
-			//if user clicks on play/pause
+			//if someone clicks on play/pause
 			else if(line.equalsIgnoreCase("play")){
-System.out.println("In here");
+				System.out.println("In pl");
 				//Simulate press and release of spacebar
 				robot.keyPress(KeyEvent.VK_SPACE);
 				robot.keyRelease(KeyEvent.VK_SPACE);
 			}
-			//input will come in x,y format if user moves mouse on mousepad
+			
 			else if(line.contains(",")){
-				float movex=Float.parseFloat(line.split(",")[0]);//extract movement in x direction
-				float movey=Float.parseFloat(line.split(",")[1]);//extract movement in y direction
-				Point point = MouseInfo.getPointerInfo().getLocation(); //Get current mouse position
+				float movex=Float.parseFloat(line.split(",")[0]);
+				float movey=Float.parseFloat(line.split(",")[1]);
+				Point point = MouseInfo.getPointerInfo().getLocation(); 
 				float nowx=point.x;
 				float nowy=point.y;
-				robot.mouseMove((int)(nowx+movex),(int)(nowy+movey));//Move mouse pointer to new location
+				robot.mouseMove((int)(nowx+movex),(int)(nowy+movey));
 			}
-			//if user taps on mousepad to simulate a left click
+
 			else if(line.contains("left_click")){
-				//Simulate press and release of mouse button 1(makes sure correct button is pressed based on user's dexterity)
+				
 				robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
 				robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 			}
-			//Exit if user ends the connection
+
 			else if(line.equalsIgnoreCase("exit")){
 				isConnected=false;
-				//Close server and client socket
+
 				server.close();
 				client.close();
 			}
